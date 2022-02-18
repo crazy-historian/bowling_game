@@ -166,7 +166,7 @@ class BowlGameView(arcade.View):
     def __init__(self):
         super().__init__()
         self.pressed = None
-        arcade.set_background_color(arcade.color.SAE)
+        arcade.set_background_color(arcade.color.BROWN)
         self.mode = data
         # задаем длину дорожки по файлу
         if self.mode["length"] == "long":
@@ -183,9 +183,9 @@ class BowlGameView(arcade.View):
         elif self.mode["powered"] == "easy":
             self.n = 3
         arcade.get_window().set_size(self.screen_width, screen_height)
-        #self.player = Player(self.screen_width)
-        #self.ball = Ball(self.screen_width)
-        #self.pin = Pin(self.screen_width)
+        self.player = Player(self.screen_width)
+        self.ball = Ball(self.screen_width)
+        self.pin = Pin(self.screen_width, self.n)
 
     def on_draw(self):
         arcade.start_render()
@@ -193,14 +193,20 @@ class BowlGameView(arcade.View):
         arcade.draw_lrtb_rectangle_filled(0, screen_width, screen_height / 2.5, 0, arcade.color.WOOD_BROWN)
         # рисуем аут
         arcade.draw_lrtb_rectangle_filled(0, screen_width, 50, 0, arcade.color.BLACK)
-        # иконка персонажа self.player.draw()
-        # иконка шара self.ball.draw()
+        # иконка персонажа
+        self.player.draw()
+        # иконка шара
+        self.ball.draw()
+        self.pin.draw()
+        # self.pin.on_draw()
+        # Отрисовываем кегли
         # for i in range(0, self.n):
-        #       self.pin.draw()
+        # self.x -= 50
+        # self.y -= 50
 
     def on_update(self, delta_tie):
         pass
-        #self.player.update(self.pressed)
+        # self.player.update(self.pressed)
 
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.ESCAPE:
@@ -229,21 +235,26 @@ class BowlGameView(arcade.View):
 
 
 class Player(arcade.Sprite):
-    pass
-    #def __init__(self, width_p):
-    #    super().__init__("images/player.png", 0.3, center_x=width_p/2, center_y=screen_height/2)
+    def __init__(self, width_p):
+        super().__init__("images/player.png", 0.3, center_x=width_p / 6, center_y=screen_height / 2)
 
 
 class Ball(arcade.Sprite):
-    pass
-    #def __init__(self, width_b):
-    #    super().__init__("images/ball.png", 0.2, center_x=width_b/2, center_y=screen_height/3)
+    def __init__(self, width_b):
+        super().__init__("images/ball.png", 0.2, center_x=width_b / 4, center_y=screen_height / 3)
 
 
 class Pin(arcade.Sprite):
-    pass
-    #def __init__(self, width_pin):
-     #   super().__init__("images/pin.png", 0.2, center_x=width_pin, center_y=screen_height/3)
+    def __init__(self, width_pin, n):
+        super().__init__("images/pin.png", 0.2, center_x=width_pin -50, center_y=screen_height-500)
+        self.x = screen_width - 50
+        self.y = screen_height - 500
+        self.n = n
+
+    # def on_draw(self):
+    #   for i in range(0, self.n):
+    #      self.draw(x=self.x, y=self.y)
+    #      self.x -= 500
 
 
 def main():
