@@ -111,6 +111,9 @@ class PauseView(arcade.View):
             self.window.show_view(game)
         elif key == arcade.key.ESCAPE:
             arcade.close_window()
+        if key == arcade.key.TAB:
+            start_view = MainMenuView()
+            self.window.show_view(start_view)
 
 
 # Класс победы
@@ -185,7 +188,7 @@ class BowlGameView(arcade.View):
         arcade.get_window().set_size(self.screen_width, screen_height)
         self.player = Player(self.screen_width)
         self.ball = Ball(self.screen_width)
-        self.pin = Pin(self.screen_width, self.n)
+        self.pin_list = pin_list(self.screen_width, self.n)
 
     def on_draw(self):
         arcade.start_render()
@@ -197,12 +200,8 @@ class BowlGameView(arcade.View):
         self.player.draw()
         # иконка шара
         self.ball.draw()
-        self.pin.draw()
-        # self.pin.on_draw()
         # Отрисовываем кегли
-        # for i in range(0, self.n):
-        # self.x -= 50
-        # self.y -= 50
+        self.pin_list.on_draw()
 
     def on_update(self, delta_tie):
         pass
@@ -211,6 +210,9 @@ class BowlGameView(arcade.View):
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.ESCAPE:
             arcade.close_window()
+        if symbol == arcade.key.TAB:
+            start_view = MainMenuView()
+            self.window.show_view(start_view)
         if symbol == arcade.key.ENTER:
             pause = PauseView(self, self.screen_width)
             self.window.show_view(pause)
@@ -244,17 +246,33 @@ class Ball(arcade.Sprite):
         super().__init__("images/ball.png", 0.2, center_x=width_b / 4, center_y=screen_height / 3)
 
 
-class Pin(arcade.Sprite):
+class pin_list(arcade.SpriteList):
     def __init__(self, width_pin, n):
-        super().__init__("images/pin.png", 0.2, center_x=width_pin -50, center_y=screen_height-500)
-        self.x = screen_width - 50
-        self.y = screen_height - 500
+        super().__init__()
+        self.x = width_pin - 100
+        self.y = screen_height - 400
         self.n = n
+        self.pin_list = arcade.SpriteList()
 
-    # def on_draw(self):
-    #   for i in range(0, self.n):
-    #      self.draw(x=self.x, y=self.y)
-    #      self.x -= 500
+        for i in range(0, self.n):
+            pin = arcade.Sprite("images/pin.png", 0.2, center_x=self.x, center_y=self.y)
+            self.pin_list.append(pin)
+            if i < 2:
+                self.x -= 50
+            elif i < 4:
+                self.x += 50
+            elif i < 5:
+                self.y += 150
+            elif i == 6:
+                self.x += 50
+            elif i > 7:
+                self.x = self.x
+            else:
+                self.y += 100
+            self.y -= 50
+
+    def on_draw(self):
+        self.pin_list.draw()
 
 
 def main():
