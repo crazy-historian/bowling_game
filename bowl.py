@@ -1,7 +1,7 @@
 # 1 нужно прописать менюшку
 # сделать одну для преподавателя,1 для ученика
 import arcade
-import time
+import pymunk
 import arcade.gui
 import json
 
@@ -238,12 +238,15 @@ class BowlGameView(arcade.View):
 
 class Player(arcade.Sprite):
     def __init__(self, width_p):
-        super().__init__("images/player.png", 0.3, center_x=width_p / 6, center_y=screen_height / 2)
+        super().__init__("images/player.png", 0.5, center_x=width_p / 6, center_y=screen_height / 2)
+
+    def update(self):
+        pass
 
 
 class Ball(arcade.Sprite):
     def __init__(self, width_b):
-        super().__init__("images/ball.png", 0.2, center_x=width_b / 4, center_y=screen_height / 3)
+        super().__init__("images/ball.png", 0.4, center_x=width_b / 4, center_y=screen_height / 3)
 
 
 class pin_list(arcade.SpriteList):
